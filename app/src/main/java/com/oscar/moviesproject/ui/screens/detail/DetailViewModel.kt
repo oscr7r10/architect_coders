@@ -6,9 +6,12 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oscar.moviesproject.data.Movie
+import com.oscar.moviesproject.data.MoviesRepository
 import kotlinx.coroutines.launch
 
 class DetailViewModel(private val id: Int): ViewModel() {
+
+    private val repository = MoviesRepository()
 
     var state by mutableStateOf(UiState())
         private set
@@ -16,7 +19,10 @@ class DetailViewModel(private val id: Int): ViewModel() {
     init {
         viewModelScope.launch {
             state = UiState(loading = true)
-            state = UiState(loading = false, movie = Movie())
+            state = UiState(
+                loading = false,
+                movie = repository.findMovieById(id)
+            )
         }
     }
 
