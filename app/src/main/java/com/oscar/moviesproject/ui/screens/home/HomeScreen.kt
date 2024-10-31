@@ -1,5 +1,6 @@
 package com.oscar.moviesproject.ui.screens.home
 
+import android.Manifest
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -34,7 +35,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.oscar.moviesproject.R
 import com.oscar.moviesproject.data.Movie
+import com.oscar.moviesproject.ui.common.PermissionRequestEffect
+import com.oscar.moviesproject.ui.common.getRegion
 import com.oscar.moviesproject.ui.components.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -46,6 +50,13 @@ fun HomeScreen(
     val ctx = LocalContext.current.applicationContext
     val coroutineScope = rememberCoroutineScope()
     val state = vm.state
+
+    PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) {granted ->
+        coroutineScope.launch {
+            val region = if (granted) ctx.getRegion() else "US"
+            vm.onUiReady(region)
+        }
+    }
 
     Screen {
         val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()

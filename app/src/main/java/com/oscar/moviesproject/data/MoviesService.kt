@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface MoviesService {
 
-    @GET("discover/movie?sort_by=popularity.des")
+    @GET("discover/movie?sort_by=popularity.desc")
     suspend fun fetchPopularMovies(@Query("region") region: String) : RemoteResult
 
     @GET("movie/{id}")

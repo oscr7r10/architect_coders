@@ -22,8 +22,9 @@ class HomeViewModel : ViewModel() {
             state = UiState(loading = true)
             delay(2000)
             state = UiState(
-                loading = true,
-                movies = repository.fetchPopularMovies(region))
+                loading = false,
+                movies = repository.fetchPopularMovies(region)
+            )
         }
     }
 

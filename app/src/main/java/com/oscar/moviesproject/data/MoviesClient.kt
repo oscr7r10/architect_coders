@@ -20,7 +20,7 @@ object MoviesClient {
     }
 
     val instance = Retrofit.Builder()
-        .baseUrl("")
+        .baseUrl("https://api.themoviedb.org/3/")
         .client(okHttpClient)
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
