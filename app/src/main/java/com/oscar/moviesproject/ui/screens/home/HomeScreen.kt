@@ -32,11 +32,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import coil.compose.AsyncImage
 import com.oscar.moviesproject.R
 import com.oscar.moviesproject.data.Movie
+import com.oscar.moviesproject.data.PosterItemModel
 import com.oscar.moviesproject.ui.common.PermissionRequestEffect
 import com.oscar.moviesproject.ui.common.getRegion
+import com.oscar.moviesproject.ui.components.LoadingProgress
+import com.oscar.moviesproject.ui.components.PosterItem
 import com.oscar.moviesproject.ui.components.Screen
 import kotlinx.coroutines.launch
 
@@ -73,14 +75,7 @@ fun HomeScreen(
         ){ padding->
 
             if (state.loading){
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    contentAlignment = Alignment.Center
-                ){
-                    CircularProgressIndicator()
-                }
+                LoadingProgress(modifier = Modifier.fillMaxSize())
             }
             LazyVerticalGridAC(
                 state = state,
@@ -103,11 +98,16 @@ fun LazyVerticalGridAC(state: HomeViewModel.UiState, contentPadding: PaddingValu
         contentPadding = contentPadding
     ) {
         items(state.movies){movie->
-            MovieItem(movie = movie, onClick = {onClick(movie)})
+            //MovieItem(movie = movie, onClick = {onClick(movie)})
+            PosterItem(
+                posterItemModel = PosterItemModel(id = movie.id, image = movie.poster, title = movie.title),
+                onClick = {onClick(movie)}
+            )
         }
     }
 }
 
+/*
 @Composable
 fun MovieItem(movie: Movie, onClick: () ->Unit) {
     Column {
@@ -127,4 +127,4 @@ fun MovieItem(movie: Movie, onClick: () ->Unit) {
             modifier = Modifier.padding(8.dp)
         )
     }
-}
+}*/

@@ -5,3 +5,9 @@ data class Movie(
     val title: String,
     val poster: String
 )
+
+data class PosterItemModel(
+    val id: Int,
+    val title: String,
+    val image: String
+)
