@@ -7,6 +7,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.oscar.moviesproject.R
@@ -15,7 +16,8 @@ import com.oscar.moviesproject.R
 @OptIn(ExperimentalMaterial3Api::class)
 fun DetailTopBar(
     title: String,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior
 ) {
     TopAppBar(
         title = { Text(text = title) },
@@ -26,6 +28,7 @@ fun DetailTopBar(
                     contentDescription = stringResource(id = R.string.back)
                 )
             }
-        }
+        },
+        scrollBehavior = scrollBehavior
     )
 }
