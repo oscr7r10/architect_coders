@@ -16,22 +16,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.oscar.moviesproject.R
 import com.oscar.moviesproject.data.Movie
 import com.oscar.moviesproject.data.PosterItemModel
-import com.oscar.moviesproject.ui.common.PermissionRequestEffect
-import com.oscar.moviesproject.ui.common.getRegion
 import com.oscar.moviesproject.ui.components.LoadingProgress
 import com.oscar.moviesproject.ui.components.PosterItem
 import com.oscar.moviesproject.ui.components.Screen
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,36 +36,29 @@ fun HomeScreen(
     vm: HomeViewModel = viewModel()
 ) {
 
-    val ctx = LocalContext.current.applicationContext
-    val coroutineScope = rememberCoroutineScope()
-    val state = vm.state
+    val homeState = rememberHomeState()
+    val state = vm.state.collectAsState()
 
-    PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) {granted ->
-        coroutineScope.launch {
-            val region = if (granted) ctx.getRegion() else "US"
-            vm.onUiReady(region)
-        }
-    }
+    homeState.AskRegionEffect { vm.onUiReady(it) }
 
     Screen {
-        val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
         Scaffold (
             topBar = {
                 TopAppBar(
                 title = { Text(text = stringResource(id = R.string.app_name)) },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = homeState.scrollBehavior
                 )
             },
             modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+                .nestedScroll(homeState.scrollBehavior.nestedScrollConnection),
             contentWindowInsets =  WindowInsets.safeDrawing
         ){ padding->
 
-            if (state.loading){
+            if (state.value.loading){
                 LoadingProgress(modifier = Modifier.fillMaxSize())
             }
             LazyVerticalGridAC(
-                state = state,
+                state = state.value,
                 contentPadding = padding,
                 onClick = {  movie ->
                     onClick(movie)
