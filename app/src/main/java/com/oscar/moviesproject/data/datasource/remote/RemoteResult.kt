@@ -1,4 +1,4 @@
-package com.oscar.moviesproject.data
+package com.oscar.moviesproject.data.datasource.remote
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

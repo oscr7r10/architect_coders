@@ -1,32 +1,41 @@
 package com.oscar.moviesproject.ui.screens.home
 
 import android.Manifest
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.oscar.moviesproject.R
 import com.oscar.moviesproject.data.Movie
-import com.oscar.moviesproject.data.PosterItemModel
-import com.oscar.moviesproject.ui.components.LoadingProgress
-import com.oscar.moviesproject.ui.components.PosterItem
+import com.oscar.moviesproject.ui.common.ACScaffold
+import com.oscar.moviesproject.ui.common.PermissionRequestEffect
 import com.oscar.moviesproject.ui.components.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,12 +46,15 @@ fun HomeScreen(
 ) {
 
     val homeState = rememberHomeState()
-    val state = vm.state.collectAsState()
+    val state by vm.state.collectAsState()
 
-    homeState.AskRegionEffect { vm.onUiReady(it) }
+    PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) {
+        vm.onUiReady()
+    }
 
     Screen {
-        Scaffold (
+        ACScaffold (
+            state = state,
             topBar = {
                 TopAppBar(
                 title = { Text(text = stringResource(id = R.string.app_name)) },
@@ -52,13 +64,13 @@ fun HomeScreen(
             modifier = Modifier
                 .nestedScroll(homeState.scrollBehavior.nestedScrollConnection),
             contentWindowInsets =  WindowInsets.safeDrawing
-        ){ padding->
+        ){ padding, movies ->
 
-            if (state.value.loading){
+            /*if (state.value.loading){
                 LoadingProgress(modifier = Modifier.fillMaxSize())
-            }
+            }*/
             LazyVerticalGridAC(
-                state = state.value,
+                movies = movies,
                 contentPadding = padding,
                 onClick = {  movie ->
                     onClick(movie)
@@ -70,7 +82,7 @@ fun HomeScreen(
 
 @Composable
 fun LazyVerticalGridAC(
-    state: HomeViewModel.UiState,
+    movies: List<Movie>,
     contentPadding: PaddingValues,
     onClick: (Movie)-> Unit
 ) {
@@ -81,29 +93,40 @@ fun LazyVerticalGridAC(
         modifier = Modifier.padding(4.dp),
         contentPadding = contentPadding
     ) {
-        items(state.movies){movie->
-            //MovieItem(movie = movie, onClick = {onClick(movie)})
-            PosterItem(
+        items(movies){movie->
+            MovieItem(movie = movie, onClick = {onClick(movie)})
+            /*PosterItem(
                 posterItemModel = PosterItemModel(id = movie.id, image = movie.poster, title = movie.title),
                 onClick = {onClick(movie)}
-            )
+            )*/
         }
     }
 }
 
-/*
+
 @Composable
 fun MovieItem(movie: Movie, onClick: () ->Unit) {
     Column {
-        AsyncImage(
-            model = movie.poster,
-            contentDescription = movie.title,
-            modifier = Modifier
-                .clickable(onClick = onClick)
-                .fillMaxWidth()
-                .aspectRatio(ratio = 2 / 3f)
-                .clip(MaterialTheme.shapes.small)
-        )
+        Box {
+            AsyncImage(
+                model = movie.poster,
+                contentDescription = movie.title,
+                modifier = Modifier
+                    .clickable(onClick = onClick)
+                    .fillMaxWidth()
+                    .aspectRatio(ratio = 2 / 3f)
+                    .clip(MaterialTheme.shapes.small)
+            )
+            if (movie.favorite){
+                Icon(
+                    imageVector = Icons.Default.Favorite,
+                    contentDescription = stringResource(id = R.string.back),
+                    tint = MaterialTheme.colorScheme.inverseOnSurface,
+                    modifier = Modifier.padding(8.dp)
+                        .align(Alignment.TopEnd)
+                )
+            }
+        }
         Text(
             text = movie.title,
             style = MaterialTheme.typography.bodySmall,
@@ -111,4 +134,4 @@ fun MovieItem(movie: Movie, onClick: () ->Unit) {
             modifier = Modifier.padding(8.dp)
         )
     }
-}*/
+}

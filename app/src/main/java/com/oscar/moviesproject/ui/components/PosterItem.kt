@@ -1,6 +1,7 @@
 package com.oscar.moviesproject.ui.components
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,15 +18,17 @@ import com.oscar.moviesproject.data.PosterItemModel
 @Composable
 fun PosterItem(posterItemModel: PosterItemModel, modifier: Modifier = Modifier, onClick: () ->Unit) {
     Column {
-        AsyncImage(
-            model = posterItemModel.image,
-            contentDescription = posterItemModel.title,
-            modifier = modifier
-                .clickable(onClick = onClick)
-                .fillMaxWidth()
-                .aspectRatio(ratio = 2 / 3f)
-                .clip(MaterialTheme.shapes.small)
-        )
+        Box {
+            AsyncImage(
+                model = posterItemModel.image,
+                contentDescription = posterItemModel.title,
+                modifier = modifier
+                    .clickable(onClick = onClick)
+                    .fillMaxWidth()
+                    .aspectRatio(ratio = 2 / 3f)
+                    .clip(MaterialTheme.shapes.small)
+            )
+        }
         Text(
             text = posterItemModel.title,
             style = MaterialTheme.typography.bodySmall,

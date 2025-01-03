@@ -1,31 +1,34 @@
 package com.oscar.moviesproject.data
 
-class MoviesRepository {
+import com.oscar.moviesproject.data.datasource.MoviesLocalDataSource
+import com.oscar.moviesproject.data.datasource.MoviesRemoteDataSource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.onEach
 
-    suspend fun fetchPopularMovies(region: String): List<Movie> =
-        MoviesClient
-            .instance
-            .fetchPopularMovies(region)
-            .results
-            .map { it.toDomainModel() }
+class MoviesRepository(
+    private val remoteDataSource: MoviesRemoteDataSource,
+    private val localDataSource: MoviesLocalDataSource,
+    private val regionRepository: RegionRepository
+) {
 
-    suspend fun findMovieById(id: Int): Movie =
-        MoviesClient
-            .instance
-            .fetchMovieById(id)
-            .toDomainModel()
+    val movies: Flow<List<Movie>> = localDataSource.movies.onEach {localMovies->
+        if (localMovies.isEmpty()){
+            val region = regionRepository.findLastRegion()
+            val remoteMovies = remoteDataSource.fetchPopularMovies(region)
+            localDataSource.saveMovies(remoteMovies)
+        }
+    }
+
+    fun findMovieById(id: Int): Flow<Movie> = localDataSource.findMoviesById(id)
+        .onEach {
+            if (it == null) {
+                val remoteMovie = remoteDataSource.findMovieById(id)
+                localDataSource.saveMovies(listOf(remoteMovie))
+            }
+        }.filterNotNull()
+
+    suspend fun toggleFavorite(movie: Movie) {
+        localDataSource.saveMovies(listOf(movie.copy(favorite = !movie.favorite)))
+    }
 }
-
-private fun RemoteMovie.toDomainModel(): Movie =
-    Movie(
-        id = id,
-        title = title,
-        overview = overview,
-        releaseDate = releaseDate,
-        poster = "https://image.tmdb.org/t/p/w185/$posterPath",
-        backdrop = backdropPath.let { "https://image.tmdb.org/t/p/w780/$it" },
-        originalTitle = originalTitle,
-        originalLanguage = originalLanguage,
-        popularity = popularity,
-        voteAverage = voteAverage
-    )
