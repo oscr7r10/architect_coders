@@ -22,12 +22,12 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.oscar.moviesproject.data.Movie
+import com.oscar.domain.Movie
 
 @Composable
 fun MovieDetail(
     padding: PaddingValues,
-    movie: Movie
+    movie: com.oscar.domain.Movie
 ) {
     Column (
         modifier = Modifier

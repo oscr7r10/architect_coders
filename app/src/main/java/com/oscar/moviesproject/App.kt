@@ -2,7 +2,7 @@ package com.oscar.moviesproject
 
 import android.app.Application
 import androidx.room.Room
-import com.oscar.moviesproject.data.datasource.database.MoviesDatabase
+import com.oscar.moviesproject.framework.database.MoviesDatabase
 
 class App : Application() {
 

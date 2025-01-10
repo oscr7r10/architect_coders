@@ -13,10 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.oscar.moviesproject.data.PosterItemModel
+import com.oscar.domain.PosterItemModel
 
 @Composable
-fun PosterItem(posterItemModel: PosterItemModel, modifier: Modifier = Modifier, onClick: () ->Unit) {
+fun PosterItem(posterItemModel: com.oscar.domain.PosterItemModel, modifier: Modifier = Modifier, onClick: () ->Unit) {
     Column {
         Box {
             AsyncImage(

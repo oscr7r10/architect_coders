@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.oscar.moviesproject.R
-import com.oscar.moviesproject.data.Movie
+import com.oscar.domain.Movie
 import com.oscar.moviesproject.ui.common.ACScaffold
 import com.oscar.moviesproject.ui.common.PermissionRequestEffect
 import com.oscar.moviesproject.ui.components.Screen
@@ -95,10 +95,6 @@ fun LazyVerticalGridAC(
     ) {
         items(movies){movie->
             MovieItem(movie = movie, onClick = {onClick(movie)})
-            /*PosterItem(
-                posterItemModel = PosterItemModel(id = movie.id, image = movie.poster, title = movie.title),
-                onClick = {onClick(movie)}
-            )*/
         }
     }
 }

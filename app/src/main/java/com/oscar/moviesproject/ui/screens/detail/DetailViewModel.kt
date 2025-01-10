@@ -3,11 +3,10 @@ package com.oscar.moviesproject.ui.screens.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oscar.moviesproject.Result
-import com.oscar.moviesproject.data.Movie
 import com.oscar.moviesproject.ifSuccess
 import com.oscar.moviesproject.stateAsResultIn
-import com.oscar.moviesproject.usecases.FindMovieByIdUseCase
-import com.oscar.moviesproject.usecases.ToggleFavoriteUseCase
+import com.oscar.usecases.FindMovieByIdUseCase
+import com.oscar.usecases.ToggleFavoriteUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
@@ -17,11 +16,11 @@ sealed interface DetailAction{
 
 class DetailViewModel(
     id: Int,
-    private val toggleFavoriteUseCase: ToggleFavoriteUseCase,
-    private val findMovieByIdUseCase: FindMovieByIdUseCase
+    private val toggleFavoriteUseCase: com.oscar.usecases.ToggleFavoriteUseCase,
+    private val findMovieByIdUseCase: com.oscar.usecases.FindMovieByIdUseCase
 ): ViewModel() {
 
-    val state: StateFlow<Result<Movie>> = findMovieByIdUseCase(id)
+    val state: StateFlow<Result<com.oscar.domain.Movie>> = findMovieByIdUseCase(id)
         .stateAsResultIn(viewModelScope)
 
     fun onAction(action: DetailAction){
