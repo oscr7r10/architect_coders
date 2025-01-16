@@ -11,18 +11,20 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.google.android.gms.location.LocationServices
+import com.oscar.core.MoviesClient
+import com.oscar.detail.DetailScreen
+import com.oscar.detail.DetailViewModel
 import com.oscar.moviesproject.App
-import com.oscar.data.MoviesRepository
-import com.oscar.data.RegionRepository
-import com.oscar.moviesproject.framework.GeocoderRegionDataSource
-import com.oscar.moviesproject.framework.MoviesRoomDataSource
-import com.oscar.moviesproject.framework.remote.MoviesClient
-import com.oscar.moviesproject.framework.MoviesServerDataSource
-import com.oscar.moviesproject.framework.PlayServicesLocationDataSource
-import com.oscar.moviesproject.ui.screens.detail.DetailScreen
-import com.oscar.moviesproject.ui.screens.detail.DetailViewModel
-import com.oscar.moviesproject.ui.screens.home.HomeScreen
-import com.oscar.moviesproject.ui.screens.home.HomeViewModel
+import com.oscar.movie.usecases.FindMovieByIdUseCase
+import com.oscar.movie.usecases.ToggleFavoriteUseCase
+import com.oscar.movie.usecases.FetchMoviesUseCase
+import com.oscar.movie.data.MoviesRepository
+import com.oscar.movie.database.MoviesRoomDataSource
+import com.oscar.movie.network.MoviesServerDataSource
+import com.oscar.moviesproject.BuildConfig
+import com.oscar.region.GeocoderRegionDataSource
+import com.oscar.region.PlayServicesLocationDataSource
+import com.oscar.region.data.RegionRepository
 
 sealed class NavScreen(val route: String) {
     data object Home : NavScreen(route = "home")
@@ -40,8 +42,8 @@ fun Navigation() {
     val navController = rememberNavController()
     val app = LocalContext.current.applicationContext as App
     val moviesRepository = remember {
-        com.oscar.data.MoviesRepository(
-            regionRepository = com.oscar.data.RegionRepository(
+        MoviesRepository(
+            regionRepository = RegionRepository(
                 GeocoderRegionDataSource(
                     geocoder = Geocoder(app),
                     locationDataSource = PlayServicesLocationDataSource(
@@ -52,18 +54,27 @@ fun Navigation() {
                 )
             ),
             localDataSource = MoviesRoomDataSource(app.db.moviesDao()),
-            remoteDataSource = MoviesServerDataSource(MoviesClient.instance)
+            remoteDataSource = MoviesServerDataSource(
+                MoviesClient(
+                    BuildConfig.TMDB_API_KEY
+                ).instance)
         )
     }
     NavHost(navController = navController, startDestination = NavScreen.Home.route) {
         composable(NavScreen.Home.route) {
-            HomeScreen(
+            com.oscar.home.HomeScreen(
                 onClick = { movie ->
                     navController.navigate(
                         route = NavScreen.Detail.createRoute(movieId = movie.id)
                     )
                 },
-                viewModel { HomeViewModel(com.oscar.usecases.FetchMoviesUseCase(moviesRepository)) }
+                viewModel {
+                    com.oscar.home.HomeViewModel(
+                        FetchMoviesUseCase(
+                            moviesRepository
+                        )
+                    )
+                }
             )
         }
         composable(
@@ -77,8 +88,8 @@ fun Navigation() {
                 vm = viewModel {
                     DetailViewModel(
                         movieId,
-                        com.oscar.usecases.ToggleFavoriteUseCase(moviesRepository),
-                        com.oscar.usecases.FindMovieByIdUseCase(moviesRepository)
+                        ToggleFavoriteUseCase(moviesRepository),
+                        FindMovieByIdUseCase(moviesRepository)
                     )
                 },
                 onBack = { navController.popBackStack() }

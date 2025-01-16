@@ -2,17 +2,16 @@ package com.oscar.moviesproject
 
 import android.app.Application
 import androidx.room.Room
-import com.oscar.moviesproject.framework.database.MoviesDatabase
 
 class App : Application() {
 
-    lateinit var db: MoviesDatabase
+    lateinit var db: com.oscar.core.MoviesDatabase
         private set
 
     override fun onCreate() {
         super.onCreate()
 
-        db = Room.databaseBuilder(this, MoviesDatabase::class.java, "movies-db")
+        db = Room.databaseBuilder(this, com.oscar.core.MoviesDatabase::class.java, "movies-db")
             .build()
 
     }
