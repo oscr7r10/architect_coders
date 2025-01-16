@@ -18,3 +18,4 @@ local.properties
 /.idea/gradle.xml
 
 /build-logic/.gradle
+/build-logic/convention/build
