@@ -1,5 +1,6 @@
 plugins {
     id("oscar.android.library")
+    id("oscar.di.library")
 }
 
 android {

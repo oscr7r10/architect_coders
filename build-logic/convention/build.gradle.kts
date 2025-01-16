@@ -41,5 +41,13 @@ gradlePlugin {
             id = "oscar.jvm.retrofit"
             implementationClass = "JvmRetrofitConventionPlugin"
         }
+        register("diLibrary"){
+            id = "oscar.di.library"
+            implementationClass = "DiLibraryConventionPlugin"
+        }
+        register("diLibraryCompose"){
+            id = "oscar.di.library.compose"
+            implementationClass = "DiLibraryComposeConventionPlugin"
+        }
     }
 }
