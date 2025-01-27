@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.ksp)
     id("oscar.android.application")
     id("oscar.android.application.compose")
-    id("oscar.android.room")
     id("oscar.di.library.compose")
 }
 

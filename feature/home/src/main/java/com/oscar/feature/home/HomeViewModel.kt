@@ -6,16 +6,17 @@ import com.oscar.feature.common.Result
 import com.oscar.domain.movie.entities.Movie
 import com.oscar.feature.common.stateAsResultIn
 import com.oscar.domain.movie.usecases.FetchMoviesUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
-import org.koin.android.annotation.KoinViewModel
+import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
-@KoinViewModel
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val fetchMoviesUseCase: FetchMoviesUseCase
 ) : ViewModel() {
 

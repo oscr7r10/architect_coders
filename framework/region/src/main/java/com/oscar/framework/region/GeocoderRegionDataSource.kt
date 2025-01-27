@@ -4,12 +4,11 @@ import android.location.Geocoder
 import com.oscar.domain.region.data.RegionDataSource
 import com.oscar.domain.region.entities.Location
 import com.oscar.domain.region.data.LocationDataSource
-import org.koin.core.annotation.Factory
+import javax.inject.Inject
 
 const val DEFAULT_REGION = "US"
 
-@Factory
-class GeocoderRegionDataSource(
+class GeocoderRegionDataSource @Inject constructor(
     private val geocoder: Geocoder,
     private val locationDataSource: LocationDataSource
 ) : RegionDataSource {

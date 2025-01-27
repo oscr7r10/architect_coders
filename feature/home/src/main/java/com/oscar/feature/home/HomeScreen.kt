@@ -30,20 +30,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.oscar.feature.common.ACScaffold
 import com.oscar.feature.common.PermissionRequestEffect
 import com.oscar.feature.common.components.Screen
 import com.oscar.domain.movie.entities.Movie
 import com.oscar.home.R
-import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onClick: (Movie)-> Unit,
-    vm: HomeViewModel = koinViewModel()
+    vm: HomeViewModel = hiltViewModel()
 ) {
 
     val homeState = rememberHomeState()

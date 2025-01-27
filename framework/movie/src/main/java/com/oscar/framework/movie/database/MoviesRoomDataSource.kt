@@ -4,10 +4,10 @@ import com.oscar.domain.movie.data.MoviesLocalDataSource
 import com.oscar.domain.movie.entities.Movie
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class MoviesRoomDataSource(private val moviesDao: MoviesDao) :
+
+class MoviesRoomDataSource @Inject constructor(private val moviesDao: MoviesDao) :
     MoviesLocalDataSource {
 
     override val movies: Flow<List<Movie>> = moviesDao.fetchPopularMovies().map { movies-> movies.map { it.toDomainMovie() } }

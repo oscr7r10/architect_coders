@@ -1,11 +1,27 @@
 package com.oscar.framework.core
 
+import android.app.Application
 import androidx.room.Room
-import org.koin.core.qualifier.named
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
+import javax.inject.Singleton
 
-val frameworkCoreModule = module {
-    single { Room.databaseBuilder(get(), MoviesDatabase::class.java, "movies.db").build() }
-    factory { get<MoviesDatabase>().moviesDao() }
-    single { MoviesClient(get(named("apiKey"))).instance }
+@Module
+@InstallIn(SingletonComponent::class)
+internal object FrameworkCoreModule {
+
+    @Provides
+    @Singleton
+    fun provideDatabase(app: Application) = Room.databaseBuilder(app, MoviesDatabase::class.java, "movies.db").build()
+
+    @Provides
+    fun providesMoviesDao(database: MoviesDatabase) = database.moviesDao()
+
+    @Provides
+    @Singleton
+    fun provideMoviesClient(@Named("apiKey") apiKey: String) = MoviesClient(apiKey).instance
+
 }

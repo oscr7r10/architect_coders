@@ -2,10 +2,9 @@ package com.oscar.framework.movie.network
 
 import com.oscar.domain.movie.data.MoviesRemoteDataSource
 import com.oscar.domain.movie.entities.Movie
-import org.koin.core.annotation.Single
+import javax.inject.Inject
 
-@Single
-class MoviesServerDataSource(
+class MoviesServerDataSource @Inject constructor(
     private val moviesService: MoviesService
 ) : MoviesRemoteDataSource {
 

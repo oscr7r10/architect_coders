@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.oscar.feature.common.ifSuccess
 import com.oscar.feature.common.ACScaffold
 import com.oscar.common.R
@@ -22,7 +23,8 @@ import com.oscar.feature.common.components.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(vm: DetailViewModel, onBack: ()-> Unit) {
+fun DetailScreen(vm: DetailViewModel = hiltViewModel(), onBack: ()-> Unit) {
+
     val state by vm.state.collectAsState()
     val detailState = rememberDetailState()
 
