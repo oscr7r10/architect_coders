@@ -36,21 +36,35 @@ import com.oscar.feature.common.ACScaffold
 import com.oscar.feature.common.PermissionRequestEffect
 import com.oscar.feature.common.components.Screen
 import com.oscar.domain.movie.entities.Movie
+import com.oscar.feature.common.Result
 import com.oscar.home.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    vm: HomeViewModel = hiltViewModel(),
     onClick: (Movie)-> Unit,
-    vm: HomeViewModel = hiltViewModel()
 ) {
-
-    val homeState = rememberHomeState()
-    val state by vm.state.collectAsState()
 
     PermissionRequestEffect(permission = Manifest.permission.ACCESS_COARSE_LOCATION) {
         vm.onUiReady()
     }
+
+    val state by vm.state.collectAsState()
+
+    HomeScreen(
+        state = state,
+        onClick = onClick
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(
+    state: Result<List<Movie>>,
+    onClick: (Movie)-> Unit,
+) {
+
+    val homeState = rememberHomeState()
 
     Screen {
         ACScaffold(
@@ -66,9 +80,6 @@ fun HomeScreen(
             contentWindowInsets = WindowInsets.safeDrawing
         ) { padding, movies ->
 
-            /*if (state.value.loading){
-                LoadingProgress(modifier = Modifier.fillMaxSize())
-            }*/
             LazyVerticalGridAC(
                 movies = movies,
                 contentPadding = padding,
@@ -93,7 +104,7 @@ fun LazyVerticalGridAC(
         modifier = Modifier.padding(4.dp),
         contentPadding = contentPadding
     ) {
-        items(movies){movie->
+        items(movies, key = {it.id}){movie->
             MovieItem(movie = movie, onClick = {onClick(movie)})
         }
     }
@@ -118,7 +129,8 @@ fun MovieItem(movie: Movie, onClick: () ->Unit) {
                     imageVector = Icons.Default.Favorite,
                     contentDescription = stringResource(id = com.oscar.common.R.string.back),
                     tint = MaterialTheme.colorScheme.inverseOnSurface,
-                    modifier = Modifier.padding(8.dp)
+                    modifier = Modifier
+                        .padding(8.dp)
                         .align(Alignment.TopEnd)
                 )
             }
