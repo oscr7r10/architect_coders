@@ -13,7 +13,8 @@ class MoviesRepository @Inject constructor(
     private val regionRepository: RegionRepository
 ) {
 
-    val movies: Flow<List<Movie>> = localDataSource.movies.onEach { localMovies->
+    val movies: Flow<List<Movie>>
+        get() = localDataSource.movies.onEach { localMovies->
         if (localMovies.isEmpty()){
             val region = regionRepository.findLastRegion()
             val remoteMovies = remoteDataSource.fetchPopularMovies(region)

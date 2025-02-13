@@ -9,5 +9,4 @@ class FetchMoviesUseCase @Inject constructor(private val moviesRepository: Movie
 
     operator fun invoke(): Flow<List<Movie>> = moviesRepository.movies
 
-
 }
