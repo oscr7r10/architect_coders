@@ -17,15 +17,38 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.oscar.feature.common.ifSuccess
 import com.oscar.feature.common.ACScaffold
 import com.oscar.common.R
+import com.oscar.domain.movie.entities.Movie
+import com.oscar.domain.movie.usecases.ToggleFavoriteUseCase
+import com.oscar.feature.common.Result
 import com.oscar.feature.common.components.DetailTopBar
 import com.oscar.feature.common.components.MovieDetail
 import com.oscar.feature.common.components.Screen
 
+@Composable
+fun DetailScreen(
+    vm: DetailViewModel = hiltViewModel(),
+    onBack: ()-> Unit
+) {
+    val state by vm.state.collectAsState()
+
+    DetailScreen(
+        state = state,
+        onBack = onBack,
+        onFavoriteClicked = { action ->
+            vm.onAction(action)
+        }
+    )
+
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DetailScreen(vm: DetailViewModel = hiltViewModel(), onBack: ()-> Unit) {
+fun DetailScreen(
+    state: Result<Movie>,
+    onBack: ()-> Unit,
+    onFavoriteClicked: (DetailAction) -> Unit
+) {
 
-    val state by vm.state.collectAsState()
     val detailState = rememberDetailState()
 
     Screen {
@@ -45,7 +68,7 @@ fun DetailScreen(vm: DetailViewModel = hiltViewModel(), onBack: ()-> Unit) {
                 state.ifSuccess {
                     favorite = it.favorite
                 }
-                FloatingActionButton(onClick = { vm.onAction(DetailAction.FavoriteClick) }) {
+                FloatingActionButton(onClick = { onFavoriteClicked(DetailAction.FavoriteClick) }) {
                     Icon(
                         imageVector = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = stringResource(id = R.string.back)
