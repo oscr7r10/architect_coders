@@ -8,8 +8,9 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
+import javax.inject.Inject
 
-class MoviesClient(
+internal class MoviesClient (
     private val apiKey: String,
     private val apiUrl: String) {
 

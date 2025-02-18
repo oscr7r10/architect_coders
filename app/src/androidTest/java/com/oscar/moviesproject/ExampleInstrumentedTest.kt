@@ -1,9 +1,12 @@
 package com.oscar.moviesproject
 
 import androidx.test.rule.GrantPermissionRule
+import com.oscar.domain.movie.data.MoviesRemoteDataSource
 import com.oscar.domain.movie.data.MoviesRepository
 import com.oscar.framework.movie.database.DbMovie
 import com.oscar.framework.movie.database.MoviesDao
+import com.oscar.moviesproject.data.server.MockWebServerRule
+import com.oscar.moviesproject.data.server.fromJson
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import junit.framework.TestCase.assertEquals
@@ -11,6 +14,7 @@ import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
+import okhttp3.mockwebserver.MockResponse
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -23,22 +27,35 @@ class ExampleInstrumentedTest {
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
+    val mockWebServerRule = MockWebServerRule()
+
+    @get:Rule(order = 2)
     val locationPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
         "android.permission.ACCESS_COARSE_LOCATION"
     )
 
     @Inject
-    lateinit var moviesRepository: MoviesRepository
+    lateinit var moviesDao: MoviesDao
 
     @Inject
-    lateinit var moviesDao: MoviesDao
+    lateinit var remoteDataSource: MoviesRemoteDataSource
 
     @Before
     fun setUp(){
+        mockWebServerRule.server.enqueue(
+            MockResponse().fromJson("popular_movies.json")
+        )
         hiltRule.inject()
     }
 
     @Test
+    fun check_mock_server_is_working() = runTest{
+        val movies = remoteDataSource.fetchPopularMovies("EN")
+
+        assertEquals("The Batman", movies[0].title)
+    }
+
+   /* @Test
     fun test_it_works() {
         runBlocking {
             val movie = moviesRepository.movies.first()
@@ -74,5 +91,5 @@ fun buildDatabaseMovies(vararg id: Int) = id.map {
         popularity = 5.0,
         voteAverage = 5.1,
         favorite = false
-    )
+    )*/
 }

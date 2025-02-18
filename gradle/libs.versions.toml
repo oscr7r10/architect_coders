@@ -82,6 +82,9 @@ turbine = { group = "app.cash.turbine", name = "turbine", version = "1.1.0" }
 androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "test" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "test" }
 
+okhttp-mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "okhttp" }
+
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

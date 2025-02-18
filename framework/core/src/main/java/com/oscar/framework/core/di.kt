@@ -40,6 +40,6 @@ object FrameworkCoreExtrasModule{
     @Provides
     @Singleton
     @Named("apiUrl")
-    fun provideApiUrl(): String = "https://api.themoviedb.org/3/"
+    fun provideApiUrl() = "https://api.themoviedb.org/3/"
 
 }

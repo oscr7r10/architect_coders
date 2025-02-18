@@ -59,11 +59,14 @@ class HomeScreenTest {
         setContent {
             HomeScreen(
                 state = Result.Success(movies),
-                onClick = { clickedMovieId = it.id }
+                onClick = {
+                    clickedMovieId = it.id
+                }
             )
         }
 
-        onNodeWithText("Title 2").performClick()
+        //onNodeWithText("Title 2").performClick()
+        onNodeWithTag("MOVIE_ELEMENT 2").performClick()
 
         assertEquals(2, clickedMovieId)
     }

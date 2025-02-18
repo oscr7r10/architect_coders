@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -114,7 +115,10 @@ fun LazyVerticalGridAC(
 @Composable
 fun MovieItem(movie: Movie, onClick: () ->Unit) {
     Column {
-        Box {
+        Box(
+            modifier = Modifier
+                .testTag("MOVIE_ELEMENT ${movie.id}")
+        ) {
             AsyncImage(
                 model = movie.poster,
                 contentDescription = movie.title,
