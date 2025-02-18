@@ -1,4 +1,4 @@
-package com.oscar.moviesproject.data
+package com.oscar.moviesproject.data.datasource.remote
 
 import com.oscar.moviesproject.BuildConfig
 import kotlinx.serialization.json.Json
@@ -25,17 +25,17 @@ object MoviesClient {
         .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create<MoviesService>()
-}
 
-private fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
-    chain
-        .request()
-        .newBuilder()
-        .url(
-            chain.request().url
-                .newBuilder()
-                .addQueryParameter(name = "api_key", BuildConfig.TMDB_API_KEY)
-                .build()
-        )
-        .build()
-)
+    private fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
+        chain
+            .request()
+            .newBuilder()
+            .url(
+                chain.request().url
+                    .newBuilder()
+                    .addQueryParameter(name = "api_key", BuildConfig.TMDB_API_KEY)
+                    .build()
+            )
+            .build()
+    )
+}

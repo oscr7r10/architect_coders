@@ -1,4 +1,4 @@
-package com.oscar.moviesproject.data
+package com.oscar.moviesproject.data.datasource.remote
 
 import retrofit2.http.GET
 import retrofit2.http.Path
