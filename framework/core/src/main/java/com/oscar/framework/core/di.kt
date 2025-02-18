@@ -2,6 +2,7 @@ package com.oscar.framework.core
 
 import android.app.Application
 import androidx.room.Room
+import com.oscar.framework.movie.network.MoviesService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +19,10 @@ internal object FrameworkCoreModule {
 
     @Provides
     @Singleton
-    fun provideMoviesClient(@Named("apiKey") apiKey: String) = MoviesClient(apiKey).instance
+    fun provideMoviesService(
+        @Named("apiKey") apiKey: String,
+        @Named("apiUrl") apiUrl: String
+    ): MoviesService = MoviesClient(apiKey, apiUrl).instance
 
 }
 
@@ -32,4 +36,10 @@ object FrameworkCoreExtrasModule{
         MoviesDatabase::class.java,
         "movies.db"
     ).build()
+
+    @Provides
+    @Singleton
+    @Named("apiUrl")
+    fun provideApiUrl(): String = "https://api.themoviedb.org/3/"
+
 }
