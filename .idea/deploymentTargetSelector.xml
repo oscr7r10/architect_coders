@@ -8,16 +8,16 @@
       <SelectionState runConfigName="whenSuccessState_showMovies()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="whenMovieClicked_listenerIsCalled()">
+      <SelectionState runConfigName="whenLoadingState_showProgress()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="HomeScreenTest">
+      <SelectionState runConfigName="whenSuccessState_movieIsShown()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="whenLoadingState_showProgress() (1)">
+      <SelectionState runConfigName="whenFavoriteClicked_listenerIsCalled()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="DetailViewModelTest">
+      <SelectionState runConfigName="test_it_works()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

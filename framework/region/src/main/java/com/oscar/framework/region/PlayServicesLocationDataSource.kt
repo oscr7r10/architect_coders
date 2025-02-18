@@ -20,7 +20,7 @@ class PlayServicesLocationDataSource @Inject constructor(
     private suspend fun FusedLocationProviderClient.lastLocation() : Location?{
         return suspendCancellableCoroutine { continuation ->
             lastLocation.addOnSuccessListener { location ->
-                continuation.resume(location.toDomainLocation())
+                continuation.resume(location?.toDomainLocation())
             }.addOnFailureListener{
                 continuation.resume(null)
             }

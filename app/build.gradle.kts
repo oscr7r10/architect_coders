@@ -15,7 +15,7 @@ android {
         applicationId = "com.oscar.moviesproject"
         versionCode = 1
         versionName = "1.0"
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.oscar.moviesproject.di.HiltTestRunner"
 
         vectorDrawables {
             useSupportLibrary = true
