@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.oscar.feature.common.ifSuccess
@@ -68,7 +69,7 @@ fun DetailScreen(
                 state.ifSuccess {
                     favorite = it.favorite
                 }
-                FloatingActionButton(onClick = { onFavoriteClicked(DetailAction.FavoriteClick) }) {
+                FloatingActionButton(modifier = Modifier.testTag("floating"), onClick = { onFavoriteClicked(DetailAction.FavoriteClick) }) {
                     Icon(
                         imageVector = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                         contentDescription = stringResource(id = R.string.back)

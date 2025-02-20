@@ -59,7 +59,7 @@ fun <T> ACScaffold(
                    modifier = Modifier.padding(padding)
                )
            }
-           Result.Loading -> {
+           is Result.Loading -> {
                LoadingProgress(modifier = Modifier.padding(padding))
            }
            is Result.Success -> {

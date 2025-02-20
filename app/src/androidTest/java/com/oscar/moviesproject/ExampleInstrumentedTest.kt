@@ -1,5 +1,13 @@
 package com.oscar.moviesproject
 
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.test.rule.GrantPermissionRule
 import com.oscar.domain.movie.data.MoviesRemoteDataSource
 import com.oscar.domain.movie.data.MoviesRepository
@@ -34,6 +42,12 @@ class ExampleInstrumentedTest {
         "android.permission.ACCESS_COARSE_LOCATION"
     )
 
+    @get:Rule(order = 3)
+    val composeRule = createAndroidComposeRule<MainActivity>()
+
+    @Inject
+    lateinit var moviesRepository: MoviesRepository
+
     @Inject
     lateinit var moviesDao: MoviesDao
 
@@ -55,7 +69,16 @@ class ExampleInstrumentedTest {
         assertEquals("The Batman", movies[0].title)
     }
 
-   /* @Test
+    @OptIn(ExperimentalTestApi::class)
+    @Test
+    fun click_a_movie_navigate_to_detail(): Unit = with(composeRule) {
+        //waitUntilAtLeastOneExists(hasParent(hasScrollToIndexAction()))
+        onAllNodes(hasParent(hasScrollToIndexAction()))[4].performClick()
+        
+        onNodeWithText("Turning red").assertIsDisplayed()
+    }
+
+    @Test
     fun test_it_works() {
         runBlocking {
             val movie = moviesRepository.movies.first()
@@ -91,5 +114,5 @@ fun buildDatabaseMovies(vararg id: Int) = id.map {
         popularity = 5.0,
         voteAverage = 5.1,
         favorite = false
-    )*/
+    )
 }

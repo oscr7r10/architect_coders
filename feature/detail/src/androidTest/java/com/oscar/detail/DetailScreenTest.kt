@@ -67,7 +67,7 @@ class DetailScreenTest {
                 clicked = true
             }
         }
-        onNodeWithContentDescription(getStringResource(com.oscar.common.R.string.favorite))
+        onNodeWithTag("floating").performClick()
         assertTrue(clicked)
     }
 
@@ -82,8 +82,8 @@ class DetailScreenTest {
             )
         }
 
-        onNodeWithContentDescription(getStringResource(com.oscar.common.R.string.back)).performClick()
-        Assert.assertTrue(clicked)
+        onNodeWithTag("Back").performClick()
+        assertTrue(clicked)
     }
 
 }

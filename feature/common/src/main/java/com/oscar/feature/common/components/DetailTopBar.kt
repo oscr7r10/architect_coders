@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.oscar.common.R
 
@@ -22,7 +24,9 @@ fun DetailTopBar(
     TopAppBar(
         title = { Text(text = title) },
         navigationIcon = {
-            IconButton(onClick =  onBack ) {
+            IconButton(
+                modifier = Modifier.testTag("Back")
+                , onClick =  onBack ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
                     contentDescription = stringResource(id = R.string.back)
